@@ -4,6 +4,34 @@
 #include "cpu_type.h"
 
 int cpu_type(void) {
+    int count = 0;
+#if defined(VAX)
+    count++;
+#endif
+#if defined(M68000)
+    count++;
+#endif
+#if defined(M68020)
+    count++;
+#endif
+#if defined(I80386)
+    count++;
+#endif
+#if defined(X6809)
+    count++;
+#endif
+#if defined(X6502)
+    count++;
+#endif
+#if defined(U3B2)
+    count++;
+#endif
+
+    if (count == 0)
+        return CPU_UNKNOWN;
+    else if (count != 1)
+        return CPU_UNKNOWN;
+
 #if defined(VAX)
     return CPU_VAX;
 #elif defined(M68000)
