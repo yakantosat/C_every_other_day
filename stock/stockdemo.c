@@ -22,6 +22,13 @@ int main(int argc, char **argv) {
 	exit(EXIT_FAILURE);
     }
 
+    stock_t *snew;
+    stock_t *shead = (stock_t *)malloc(sizeof(stock_t));
+    if (shead == NULL) {
+        perror("shead");
+	exit(EXIT_FAILURE);
+    }
+
     printf("> ");
     while (fgets(buffer, BUFF_SIZE, stdin) != NULL) {
         buffer[strlen(buffer) - 1] = '\0';
@@ -38,6 +45,7 @@ int main(int argc, char **argv) {
 
 	if (strcmp(command[0], "end") == 0) {
 	    end(phead);
+	    s_end(shead);
 	    break;
 	} else if (strcmp(command[0], "new") == 0) {
 	    new = newpart(phead);
@@ -45,12 +53,19 @@ int main(int argc, char **argv) {
 	    strcpy(new->desc, command[1]);
 	    new->num = atoi(command[2]);
 	    new->price = atoi(command[3]);
+
+	    snew = newstock(shead);
+	    snew->id = id;
+	    snew->total = new->num * new->price;
 	    printf("> ");
 	} else if (strcmp(command[0], "print") == 0) {
 	    printparts(phead, command[1]);
 	    printf("> ");
 	} else if (strcmp(command[0], "delete") == 0) { 
 	    delpart(&phead, atoi(command[1]));
+	    printf("> ");
+	} else if (strcmp(command[0], "buy") == 0) {
+	    buypart(shead, phead, atoi(command[1]), atoi(command[2]), atoi(command[3]));
 	    printf("> ");
 	} else {
 	    perror("command error");

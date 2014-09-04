@@ -23,6 +23,26 @@ part_t *newpart(part_t *phead) {
     return new;
 }
 
+stock_t *newstock(stock_t *shead) {
+    stock_t *new = (stock_t *) malloc(sizeof(stock_t));
+    stock_t *tmp;
+    if (new == NULL) {
+        perror("new");
+	exit(EXIT_FAILURE);
+    }
+
+    tmp = shead->next;
+    if (tmp) {
+        shead->next = new;
+	new->next = tmp;
+    } else {
+        shead->next = new;
+	new->next = NULL;
+    }
+
+    return new;
+}
+
 void printparts(part_t *phead, char *flag) {
     part_t *tmp;
     tmp = phead->next;
@@ -56,6 +76,18 @@ void end(part_t *phead) {
     free(phead);
 }
 
+void s_end(stock_t *shead) {
+    stock_t *tmp;
+    tmp = shead->next;
+
+    while (tmp) {
+        shead->next = tmp->next;
+	free(tmp);
+	tmp = shead->next;
+    }
+    free(shead);
+}
+
 int delpart(part_t **phead, int id) {
     part_t *tmp;
 
@@ -69,5 +101,30 @@ int delpart(part_t **phead, int id) {
 	return 1;
     } else {
         return 0;
+    }
+}
+
+void buypart(stock_t *shead, part_t *phead, int id, int num, int price) {
+    part_t *ptmp;
+    ptmp = phead->next;
+
+    while (ptmp) {
+        if (ptmp->id == id) {
+	    ptmp->num += num;
+	    ptmp->price = price;
+	    break;
+	}
+	ptmp = ptmp->next;
+    }
+
+    stock_t *stmp;
+    stmp = shead->next;
+
+    while (stmp) {
+        if (stmp->id == id) {
+	    stmp->total = ptmp->num * ptmp->price;
+	    break;
+	}
+	stmp = stmp->next;
     }
 }
