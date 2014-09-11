@@ -201,6 +201,7 @@ void upload(char *filename, stock_t *shead, part_t *phead, mystack_t *s) {
 	    tmp->total = sbuffer->total;
 	    tmp->num = sbuffer->num;
 	    tmp->sold = sbuffer->sold;
+	    strcpy(tmp->desc, sbuffer->desc);
 
 	    part_t *ptmp = newpart(phead);
 	    ptmp->id = iid;
@@ -218,7 +219,7 @@ void unload(char *filename, stock_t *shead) {
     stock_t *tmp;
     size_t ret;
 
-    fp = fopen(filename, "w+");
+    fp = fopen(filename, "wb");
     if (fp == NULL) {
 	perror("open file error");
 	exit(EXIT_FAILURE);
